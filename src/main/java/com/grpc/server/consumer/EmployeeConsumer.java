@@ -1,15 +1,14 @@
-package com.messaging.consumer;
+package com.grpc.server.consumer;
 
 import com.grpc.messages.EmployeeServiceGrpc;
 import com.grpc.messages.Messages;
-import io.grpc.stub.StreamObserver;
 import com.messages.Employee;
+import io.grpc.stub.StreamObserver;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.Serializer;
-import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;

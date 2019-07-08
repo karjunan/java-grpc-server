@@ -1,4 +1,4 @@
-package com.messaging.consumer;
+package com.grpc.server.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.messages.Employee;

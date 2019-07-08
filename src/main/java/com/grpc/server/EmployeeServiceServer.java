@@ -1,13 +1,8 @@
 package com.grpc.server;
 
-import com.messaging.consumer.EmployeeConsumer;
+import com.grpc.server.consumer.EmployeeConsumer;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.ServerInterceptors;
-import io.grpc.ServerServiceDefinition;
-import messages.Messages;
-
-import java.io.File;
 
 public class EmployeeServiceServer {
     public static void main(String[] args) {
