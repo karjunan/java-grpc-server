@@ -27,7 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.EmployeeConsumerServiceImplBase {
 
     static final String NAME_TOPIC = "employee-topic-1";
-    static final String SERVERS = "localhost:9092,localhost:9093,localhost:9094";
+    static final String SERVERS = "10.0.102.166:9092";
     static Properties properties;
     private Queue<Employee> queue = new LinkedBlockingQueue<>();
 
@@ -35,7 +35,7 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
         properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "name-read-example");
         properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, SERVERS);
-        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,Serdes.String().getClass());
         Map<String, Object> serdeProps = new HashMap<>();
 
@@ -50,10 +50,10 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
         final Serde<Employee> employeeSerde = Serdes.serdeFrom(employeeSerializer, employeeDeSerializer);
 //        properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,new JsonDeserializer());
         StreamsBuilder nameAgeBuilder = new StreamsBuilder();
+        System.out.println("Current properties => " + properties);
 
         KStream<String, Employee> name = nameAgeBuilder.stream(NAME_TOPIC, Consumed.with(Serdes.String(),employeeSerde ));
         name.foreach((k,v) -> {
-            System.out.println(v);
             queue.add(v);
         });
 
