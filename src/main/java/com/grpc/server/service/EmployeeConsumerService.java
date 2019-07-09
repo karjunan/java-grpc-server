@@ -28,6 +28,7 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
 
     static final String NAME_TOPIC = "employee-topic-1";
     static final String SERVERS = "10.0.102.166:9092";
+//    static final String SERVERS = "localhost:9092";
     static Properties properties;
     private Queue<Employee> queue = new LinkedBlockingQueue<>();
 
@@ -54,6 +55,7 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
 
         KStream<String, Employee> name = nameAgeBuilder.stream(NAME_TOPIC, Consumed.with(Serdes.String(),employeeSerde ));
         name.foreach((k,v) -> {
+//            System.out.println(v);
             queue.add(v);
         });
 
@@ -67,7 +69,7 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
                        StreamObserver<Messages.EmployeeResponse> responseObserver) {
 
         System.out.println("Received a message to start stream processing");
-        System.out.println(queue);
+//        System.out.println(queue);
         while(true) {
             queue.forEach(v-> {
                 System.out.println(v);
@@ -83,8 +85,9 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
                         .build();
 
                         responseObserver.onNext(response);
-                        queue.poll();
+                queue.poll();
             });
+
         }
 //        responseObserver.onCompleted();
     }
