@@ -1,4 +1,4 @@
-package com.grpc.server.consumer;
+package com.grpc.server.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;

@@ -1,6 +1,6 @@
 package com.grpc.server;
 
-import com.grpc.server.consumer.EmployeeConsumer;
+import com.grpc.server.service.EmployeeConsumerService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -18,10 +18,10 @@ public class EmployeeServiceServer {
     
     private void start() throws Exception {
         final int port = 9000;
-        EmployeeConsumer consumer = new EmployeeConsumer();
+        EmployeeConsumerService service = new EmployeeConsumerService();
 
         server = ServerBuilder.forPort(port)
-                .addService(consumer)
+                .addService(service)
                 .build()
                 .start();
 

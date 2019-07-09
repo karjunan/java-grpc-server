@@ -1,4 +1,4 @@
-package com.messages;
+package com.grpc.server.domain;
 
 final public class Employee {
 
@@ -8,10 +8,6 @@ final public class Employee {
     private int badgeNumber;
     private String firstName;
     private String lastName;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public int getId() {
         return id;

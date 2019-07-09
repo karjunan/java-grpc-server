@@ -1,8 +1,10 @@
-package com.grpc.server.consumer;
+package com.grpc.server.service;
 
-import com.grpc.messages.EmployeeServiceGrpc;
-import com.grpc.messages.Messages;
-import com.messages.Employee;
+import com.grpc.server.config.JsonPOJODeserializer;
+import com.grpc.server.config.JsonPOJOSerializer;
+import com.grpc.server.domain.Employee;
+import com.grpc.server.proto.EmployeeConsumerServiceGrpc;
+import com.grpc.server.proto.Messages;
 import io.grpc.stub.StreamObserver;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -22,15 +24,14 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class EmployeeConsumer extends EmployeeServiceGrpc.EmployeeServiceImplBase {
+public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.EmployeeConsumerServiceImplBase {
 
     static final String NAME_TOPIC = "employee-topic-1";
-    static final String MODIFIED_NAME_TOPIC = "stream-modified-name-producer-topic";
     static final String SERVERS = "localhost:9092,localhost:9093,localhost:9094";
     static Properties properties;
     private Queue<Employee> queue = new LinkedBlockingQueue<>();
 
-    public  EmployeeConsumer() {
+    public EmployeeConsumerService() {
         properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "name-read-example");
         properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, SERVERS);
@@ -84,30 +85,9 @@ public class EmployeeConsumer extends EmployeeServiceGrpc.EmployeeServiceImplBas
                         responseObserver.onNext(response);
                         queue.poll();
             });
-//            System.out.println("finished processing !! ");
         }
-
 //        responseObserver.onCompleted();
     }
 
-
-
-//    public KStream<String,String> startProcessing(KStream name) {
-//
-//        System.out.println("Starting Stream Processing !! ");
-
-//        KTable<String, Long> table = name.mapValues(v -> v.toLowerCase())
-//                .flatMapValues(values -> Arrays.asList(values.split(" ")))
-//                .selectKey((key, value) -> value)
-//                .groupByKey()
-//                .count();
-
-//        name.foreach((k, v) -> System.out.println("key " + k + " = " + v));
-//        System.out.println(" table data created => " + table);
-//        table.toStream().foreach((k, v) -> System.out.println(k + " - " + v));
-//        table.toStream().to(MODIFIED_NAME_TOPIC, Produced.with(Serdes.String(), Serdes.Long()));
-
-//        return name;
-//    }
 
 }
