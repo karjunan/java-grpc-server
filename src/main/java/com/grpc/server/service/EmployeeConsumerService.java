@@ -28,14 +28,19 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
 
     static final String NAME_TOPIC = "employee-topic-1";
     static final String SERVERS = "10.0.102.166:9092";
+//     static final String SERVERS = System.getenv("HOST_IP");
+//    static final String SERVERS="kafka:9092";
 //    static final String SERVERS = "localhost:9092";
+
     static Properties properties;
+
     private Queue<Employee> queue = new LinkedBlockingQueue<>();
 
     public EmployeeConsumerService() {
         properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "name-read-example");
-        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, SERVERS);
+//        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,  System.getenv("HOST_IP"));
+        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,  SERVERS);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,Serdes.String().getClass());
         Map<String, Object> serdeProps = new HashMap<>();
@@ -55,7 +60,7 @@ public class EmployeeConsumerService extends EmployeeConsumerServiceGrpc.Employe
 
         KStream<String, Employee> name = nameAgeBuilder.stream(NAME_TOPIC, Consumed.with(Serdes.String(),employeeSerde ));
         name.foreach((k,v) -> {
-//            System.out.println(v);
+            System.out.println(v);
             queue.add(v);
         });
 
